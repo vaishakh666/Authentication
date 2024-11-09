@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../features/userSlice';
+import { loginUser, restoreSession } from '../features/userSlice';
+import Cookies from 'js-cookie';
 import './Login.css';
 
 export default function Login() {
@@ -14,7 +15,13 @@ export default function Login() {
   const isAuthenticated = useSelector((state) => state.users.isAuthenticated);
 
   const handleLogin = () => {
+    // Dispatch login action with username and password
     dispatch(loginUser({ username, password }));
+    
+    // If not in state, check if user data exists in cookies and restore session
+    if (!isAuthenticated && Cookies.get('currentUser')) {
+      dispatch(restoreSession());
+    }
   };
 
   useEffect(() => {

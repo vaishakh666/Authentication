@@ -15,7 +15,6 @@ export default function Dataset() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Initialize users from cookies if available on first load
     dispatch(setUsers(users));
   }, [dispatch, users]);
 
