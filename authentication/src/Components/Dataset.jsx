@@ -1,7 +1,7 @@
 // src/Components/Dataset.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addUser, removeUser } from '../features/userSlice';
+import { addUser, removeUser, setUsers } from '../features/userSlice';
 import './Dataset.css';
 
 export default function Dataset() {
@@ -13,6 +13,11 @@ export default function Dataset() {
 
   const users = useSelector((state) => state.users.users);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Initialize users from cookies if available on first load
+    dispatch(setUsers(users));
+  }, [dispatch, users]);
 
   const handleRegister = () => {
     if (!username || !password) {

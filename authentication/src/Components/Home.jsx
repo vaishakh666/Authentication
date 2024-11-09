@@ -1,8 +1,9 @@
 // src/Components/Home.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logoutUser } from '../features/userSlice';
+import { logoutUser, restoreSession } from '../features/userSlice';
+import Cookies from 'js-cookie';
 import './Home.css';
 
 export default function Home() {
@@ -11,9 +12,22 @@ export default function Home() {
   const currentUser = useSelector((state) => state.users.currentUser);
   const username = currentUser?.username || 'Guest';
 
+  useEffect(() => {
+    if (!currentUser) {
+      const userInCookie = Cookies.get('currentUser') ? JSON.parse(Cookies.get('currentUser')) : null; 
+      if (userInCookie) {
+        dispatch(restoreSession());
+      } else {
+        navigate('/');
+      }
+    }
+    
+  }, [currentUser, dispatch, navigate]);
+  
+
   const handleLogout = () => {
     dispatch(logoutUser());
-    navigate('/login');
+    navigate('/');
   };
 
   return (

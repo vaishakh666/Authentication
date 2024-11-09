@@ -17,12 +17,11 @@ export default function Login() {
     dispatch(loginUser({ username, password }));
   };
 
-  // Navigate to home if authentication is successful
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/home');
     }
-  }, [isAuthenticated, navigate, username]);
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className="login-container">
